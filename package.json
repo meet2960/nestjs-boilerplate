@@ -26,12 +26,27 @@
     "pm2:logs": "pm2 logs be-app"
   },
   "dependencies": {
+    "@casl/ability": "^6.8.0",
     "@nestjs/common": "^11.1.17",
     "@nestjs/core": "^11.1.17",
     "@nestjs/platform-express": "^11.1.17",
+    "axios": "^1.14.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.2",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
     "date-fns": "^4.1.0",
+    "express": "^5.2.1",
+    "fs-extra": "^11.3.4",
+    "jsonwebtoken": "^9.0.3",
+    "lodash": "^4.17.23",
+    "morgan": "^1.10.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1",
+    "uuid": "^13.0.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

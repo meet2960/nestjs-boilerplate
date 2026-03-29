@@ -1,0 +1,14 @@
+.git
+dist
+node_modules
+db-data
+.vuepress
+.vscode
+docs
+.env
+.env.*
+*.logs
+*.docs
+docs
+logs
+public

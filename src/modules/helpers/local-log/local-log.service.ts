@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { ResponseTypeService } from '@/modules/helpers/response-type/response-type.service';
-import type { ListLocalLogsDto } from './dto/list-local-logs.dto';
 
 @Injectable()
 export class LocalLogService {
@@ -19,7 +18,8 @@ export class LocalLogService {
     'logs',
   );
 
-  async getFolders(payload: ListLocalLogsDto) {
+  // TODO : Fix the Payload type with respect to zod dto
+  async getFolders(payload: any) {
     const allFolders = fs
       .readdirSync(this.logsDirectory, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())

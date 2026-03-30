@@ -23,7 +23,6 @@ import './boilerplate.polyfill';
 import { ApplicationSharedData } from './config/shared-data/application-shared-data';
 import { setupSwagger } from './config/swagger/setup-swagger';
 import { GlobalHttpExceptionFilter } from './filters/global-http-exception.filter';
-import { QueryFailedFilter } from './filters/query-failed.filter';
 import { UnprocessableEntityExceptionFilter } from './filters/unprocessable-entity.filter';
 import { MetricsInterceptor } from './interceptors/metrics.interceptor';
 import { EncryptResponseMiddleware } from './middlewares/encrypt-response.middleware';
@@ -72,7 +71,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   app.useGlobalFilters(
     new GlobalHttpExceptionFilter(reflector), // Handle all HTTP exceptions
     new UnprocessableEntityExceptionFilter(reflector), // For Unprocessable Entity Exception Errors
-    new QueryFailedFilter(reflector), // Query Validation, Not Working right now
+    // new QueryFailedFilter(reflector), // TODO: Fix this Query Validation, with respect to Prisma Client Errors, and then add this filter back in
   );
 
   app.useGlobalInterceptors(

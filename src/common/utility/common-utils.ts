@@ -31,3 +31,27 @@ export const jwtExpiryInSeconds = {
   hours: (v: number) => v * 60 * 60,
   days: (v: number) => v * 60 * 60 * 24,
 };
+
+export function checkIsValidNumber(value: string | number | null | undefined) {
+  if (typeof value === 'number') {
+    const numberVariable = Number.isNaN(Number(value)) ? 0 : Number(value);
+    return numberVariable;
+  }
+  if (typeof value === 'string') {
+    const numberVariable = Number.isNaN(Number(value)) ? 0 : Number(value);
+    return numberVariable === 0 ? null : numberVariable;
+  }
+  return null;
+}
+
+export function isValidJSON(json: string) {
+  try {
+    if (typeof json !== 'string') {
+      return false;
+    }
+    JSON.parse(json);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

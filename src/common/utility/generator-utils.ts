@@ -1,8 +1,8 @@
-import moment from 'moment-timezone';
+import { format } from 'date-fns';
 import { customAlphabet, nanoid } from 'nanoid';
 import * as crypto from 'node:crypto';
 import { v4 as uuidv4, type Version4Options } from 'uuid';
-import { getCurrentTimestampFromMoment } from './moment-utils';
+import { getCurrentUtcDateTime } from './date-fns-utils';
 
 export function generateRandomToken() {
   return crypto.randomBytes(64).toString('hex');
@@ -46,12 +46,12 @@ export function getRandomUUID(
 }
 
 export function generateRequestId() {
-  const uniqueRequestId = `REQ_${getCurrentTimestampFromMoment()}_${getRandomUUID().slice(0, 8)}`;
+  const uniqueRequestId = `REQ_${getCurrentUtcDateTime()}_${getRandomUUID().slice(0, 8)}`;
   return uniqueRequestId;
 }
 
 export function generateNumericRequestId(): number {
-  const datePart = Number(moment().format('YYYYMMDD')); // e.g., 20250815
+  const datePart = Number(format(new Date(), 'yyyyMMdd'));
   const randomPart = Math.floor(100000 + Math.random() * 900000); // 6-digit random number
   return Number(`${datePart}${randomPart}`); // combine and convert to number
 }

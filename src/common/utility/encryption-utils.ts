@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import CryptoJS from 'crypto-js';
 import { decodeBase64ToString, encodeStringToBase64 } from './base64.util';
-import { isValidJSON } from './validate-data';
+import { isValidJSON } from './common-utils';
 
 export function cryptoEncrypt(value: string) {
   const privateKey = process.env.CRYPTO_SECRET ?? '';

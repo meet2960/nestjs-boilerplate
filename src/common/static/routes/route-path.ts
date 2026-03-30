@@ -1,5 +1,5 @@
-import { ActionCode } from '../casl/action-code';
-import { PageCode } from '../casl/page-code';
+import { ActionCode } from '@/modules/helpers/casl/static/action-code';
+import { PageCode } from '@/modules/helpers/casl/static/page-code';
 import type {
   ApiOperationOptions,
   ApiParamOptions,

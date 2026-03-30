@@ -12,8 +12,6 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import type { IUserSession } from '@/common/entity/IUserSession';
-import { ActionCode } from '@/common/static/casl/action-code';
-import { PageCode } from '@/common/static/casl/page-code';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ChangeTpinDto } from './dto/change-tpin.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
@@ -24,6 +22,8 @@ import {
   AuthUser,
   PermissionDecorator,
 } from '../../decorators';
+import { ActionCode } from '../helpers/casl/static/action-code';
+import { PageCode } from '../helpers/casl/static/page-code';
 
 @Controller('auth')
 @ApiTags('Auth')

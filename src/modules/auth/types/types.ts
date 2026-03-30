@@ -1,10 +1,10 @@
 import type { Request } from 'express';
-import type { UserEntity } from '@/modules/api/users/entities/user.entity';
 import type { IUserSession } from '@/common/entity/IUserSession';
 
+//TODO: Fix the User Entity and remove the 'any' type from the user property in ICreateLoginHistoryRecord interface
 export interface ICreateLoginHistoryRecord {
   request: Request;
-  user: UserEntity | null;
+  user: any | null;
   extraInfo: {
     event_type: string;
     latitude: string | null;

@@ -8,10 +8,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { Cache } from 'cache-manager';
+import { addDays, isAfter } from 'date-fns';
 import type { Request, Response } from 'express';
 import type { Algorithm } from 'jsonwebtoken';
 import { cloneDeep, get } from 'lodash-es';
-import moment from 'moment-timezone';
 import { LoginHistoryService } from '../api/admin/login-history/login-history.service';
 import { UserSessionService } from '../api/user-session/user-session.service';
 import { UsersService } from '../api/users/users.service';
@@ -263,7 +263,7 @@ export class AuthService {
         session_id: sessionId,
         session_token: hashToken(accessToken.token),
         refresh_token: hashToken(refreshToken),
-        expires_at: moment().clone().add(7, 'days').toDate(),
+        expires_at: addDays(new Date(), 7),
         is_revoked: false,
         revoked_at: null,
         created_by: get(user, 'user_id'),
@@ -389,7 +389,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid session');
     }
 
-    if (moment().isAfter(findSession.expires_at)) {
+    if (isAfter(new Date(), findSession.expires_at)) {
       this.removeRefreshTokenCookie(res);
       findSession.is_revoked = true;
       findSession.revoked_at = getCurrentDateTime();

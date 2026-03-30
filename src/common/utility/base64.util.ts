@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-import { isValidJSON } from './validate-data';
+import { isValidJSON } from './common-utils';
 
 /**
  * Validate Base64 string (RFC 4648 compliant)

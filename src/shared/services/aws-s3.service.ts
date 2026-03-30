@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ApiConfigService } from './api-config.service';
+import { getCurrentUtcDateTime } from '@/common/utility/date-fns-utils';
 import { base64ToFileBuffer } from '@/common/utility/file-utils';
 import { getRandomStringUtils } from '@/common/utility/generator-utils';
-import { getCurrentTimestampFromMoment } from '@/common/utility/moment-utils';
 import { streamToBuffer } from '@/common/utility/stream-utils';
 import {
   CopyObjectCommand,
@@ -72,7 +72,7 @@ export class AwsS3Service {
     try {
       const { file_name, folder_path, file_mime_type } = options;
       const safeName = this.sanitizeFilename(file_name || 'file');
-      const uniqueFileId = `${safeName}_${getCurrentTimestampFromMoment()}_${getRandomStringUtils(8)}`;
+      const uniqueFileId = `${safeName}_${getCurrentUtcDateTime()}_${getRandomStringUtils(8)}`;
 
       if (!file_base64) {
         return null;

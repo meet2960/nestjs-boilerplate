@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { flatMap } from 'lodash-es';
 import type { IUserSession } from '@/common/entity/IUserSession';
-import { PageCode } from '@/common/static/casl/page-code';
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import type { ExtractSubjectType } from '@casl/ability';
 import {
@@ -10,6 +9,7 @@ import {
   type IPagePermissions,
   type Subjects,
 } from '../static/casl.types';
+import { PageCode } from '../static/page-code';
 
 @Injectable()
 export class CaslAbilityFactory {

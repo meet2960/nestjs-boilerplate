@@ -15,11 +15,11 @@ import archiver from 'archiver';
 import type { Response } from 'express';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { ActionCode } from '@/modules/helpers/casl/static/action-code';
+import { PageCode } from '@/modules/helpers/casl/static/page-code';
 import { LocalLogService } from './local-log.service';
 import { AuthMethodDecorator, PermissionDecorator } from '@/decorators';
-import { ActionCode } from '@/common/static/casl/action-code';
-import { PageCode } from '@/common/static/casl/page-code';
-import { getCurrentTimestampFromMoment } from '@/common/utility/moment-utils';
+import { getCurrentUtcDateTime } from '@/common/utility/date-fns-utils';
 import { ListLocalLogsDto } from './dto/list-local-logs.dto';
 
 @ApiTags('Local Logs')
@@ -117,7 +117,7 @@ export class LocalLogController {
         throw new NotFoundException('Log file not found');
       }
 
-      const fileName = `${'logs'}-${getCurrentTimestampFromMoment()}.json`;
+      const fileName = `${'logs'}-${getCurrentUtcDateTime()}.json`;
 
       res.setHeader('Content-Type', 'application/json');
       res.setHeader(

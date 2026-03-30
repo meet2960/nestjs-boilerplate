@@ -9,9 +9,9 @@ import { isEmpty } from 'lodash-es';
 import {
   type Subjects,
   Action,
+  IAbility,
 } from '@/modules/helpers/casl/static/casl.types';
 import { ABILITY } from '@/decorators/permission.decorator';
-import type { IAbility } from '@/common/static/casl/types';
 import { ContextProvider } from '@/providers';
 
 @Injectable()

@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { get } from 'lodash-es';
 import * as shelljs from 'shelljs';
-import { ServiceInvokerService } from '@/modules/api/service-invoker/service-invoker.service';
 import { ResponseTypeService } from '../response-type/response-type.service';
 import { cronJobsData } from '@/common/constants/cron-jobs-code';
 
@@ -12,7 +11,6 @@ import { cronJobsData } from '@/common/constants/cron-jobs-code';
 export class CronJobsService {
   constructor(
     private readonly responseType: ResponseTypeService,
-    private readonly serviceInvokerService: ServiceInvokerService,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
 
@@ -85,26 +83,6 @@ export class CronJobsService {
     }
   }
 
-  // * Below Services are only for Backend Purposes
-  //#region // * Bulk Update Status
-  private async bulkUpdateStatusForTransaction() {
-    try {
-      const finalResponse =
-        await this.serviceInvokerService.bulkUpdateStatusForTransaction();
-      return this.responseType.successResponse({
-        message: 'CRON JOB Updating Completed',
-        data: finalResponse?.data,
-      });
-    } catch (error) {
-      return this.responseType.errorResponse({
-        message: 'Error in CRON JOB Updating',
-        data: null,
-        error,
-      });
-    }
-  }
-  //#endregion
-
   //#region // * Backup DB Code
   private backupDatabase() {
     try {
@@ -175,16 +153,6 @@ export class CronJobsService {
   //     }
   //   }
   //#endregion
-
-  @Cron(cronJobsData.updateTransactions.schedule, {
-    name: cronJobsData.updateTransactions.name,
-    disabled: cronJobsData.updateTransactions.isDisabled,
-    waitForCompletion: true,
-  })
-  async updateTransactions() {
-    const finalRes = await this.bulkUpdateStatusForTransaction();
-    console.log('CRON JOB - Update Transactions: ', finalRes.data);
-  }
 
   @Cron(cronJobsData.backupDatabase.schedule, {
     name: cronJobsData.backupDatabase.name,

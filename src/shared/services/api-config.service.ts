@@ -3,8 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import type { ThrottlerOptions } from '@nestjs/throttler';
 import path from 'node:path';
 import parse from 'parse-duration';
-import { SnakeNamingStrategy } from '@/config/typeorm/snake-naming.strategy';
-import { CustomTypeormLogger } from '@/config/typeorm/typeorm-logger';
 
 @Injectable()
 export class ApiConfigService {
@@ -104,8 +102,6 @@ export class ApiConfigService {
       applicationName: 'payments-app',
       synchronize: false,
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
-      namingStrategy: new SnakeNamingStrategy(),
-      logger: new CustomTypeormLogger(),
       extra: {
         options: `-c search_path=${this.getString('DB_SCHEMA')}`,
       },

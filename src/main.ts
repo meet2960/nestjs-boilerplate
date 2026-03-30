@@ -1,8 +1,140 @@
-import { NestFactory } from '@nestjs/core';
+import {
+  ClassSerializerInterceptor,
+  HttpStatus,
+  UnprocessableEntityException,
+  ValidationPipe,
+} from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import { EncryptionInterceptor } from './interceptors/encrypt-response-interceptor.service';
+import { TranslationInterceptor } from './interceptors/translation-interceptor.service';
+import { MetricsService } from './modules/helpers/metrics/metrics.service';
+import { ApiConfigService } from './shared/services/api-config.service';
+import { TranslationService } from './shared/services/translation.service';
 import { AppModule } from './app.module';
+import './boilerplate.polyfill';
+import { ApplicationSharedData } from './config/shared-data/application-shared-data';
+import { setupSwagger } from './config/swagger/setup-swagger';
+import { GlobalHttpExceptionFilter } from './filters/global-http-exception.filter';
+import { QueryFailedFilter } from './filters/query-failed.filter';
+import { UnprocessableEntityExceptionFilter } from './filters/unprocessable-entity.filter';
+import { MetricsInterceptor } from './interceptors/metrics.interceptor';
+import { EncryptResponseMiddleware } from './middlewares/encrypt-response.middleware';
+import { SharedModule } from './shared/shared.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+export async function bootstrap(): Promise<NestExpressApplication> {
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    new ExpressAdapter(),
+  );
+
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://api.kliqpay.in',
+      'https://app.kliqpay.in',
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    optionsSuccessStatus: 204,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+      'Idempotency-Key',
+      'User-Agent',
+    ],
+    credentials: true,
+    maxAge: 86400,
+  });
+  app.use(bodyParser.json({ limit: '100mb' }));
+  app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+  app.use(cookieParser());
+
+  app.enable('trust proxy', true); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+  app.use(helmet());
+
+  app.setGlobalPrefix('/api');
+  app.use(compression());
+  app.use(morgan('combined'));
+  app.enableVersioning();
+
+  const reflector = app.get(Reflector);
+
+  app.useGlobalFilters(
+    new GlobalHttpExceptionFilter(reflector), // Handle all HTTP exceptions
+    new UnprocessableEntityExceptionFilter(reflector), // For Unprocessable Entity Exception Errors
+    new QueryFailedFilter(reflector), // Query Validation, Not Working right now
+  );
+
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(reflector),
+    new TranslationInterceptor(
+      app.select(SharedModule).get(TranslationService),
+    ),
+  );
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // strip unknown fields
+      forbidNonWhitelisted: true,
+      transform: true, // convert primitives
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      dismissDefaultMessages: true,
+      exceptionFactory: (errors) => new UnprocessableEntityException(errors),
+    }),
+  );
+
+  if (!ApplicationSharedData.isDevelopmentMode()) {
+    app.useGlobalInterceptors(new EncryptionInterceptor()); // NestJS Interceptor
+    app.use(EncryptResponseMiddleware); // Express Middleware
+  }
+
+  const configService = app.select(SharedModule).get(ApiConfigService);
+
+  // only start nats if it is enabled
+  if (configService.natsEnabled) {
+    const natsConfig = configService.natsConfig;
+    app.connectMicroservice({
+      transport: Transport.NATS,
+      options: {
+        url: `nats://${natsConfig.host}:${natsConfig.port}`,
+        queue: 'main_service',
+      },
+    });
+
+    await app.startAllMicroservices();
+  }
+
+  if (configService.documentationEnabled) {
+    setupSwagger(app);
+  }
+
+  // Starts listening for shutdown hooks
+  if (!configService.isDevelopment) {
+    app.enableShutdownHooks();
+  }
+
+  const enableMonitoring = true;
+  if (enableMonitoring) {
+    const metricsService = app.get(MetricsService);
+    app.useGlobalInterceptors(new MetricsInterceptor(metricsService));
+  }
+
+  const port = configService.appConfig.port;
+  await app.listen(port, '0.0.0.0', () => {});
+
+  console.info(`Server Running at ${await app.getUrl()}`);
+
+  return app;
 }
-bootstrap();
+
+export const nestNodeApp = bootstrap();

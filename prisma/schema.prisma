@@ -1,13 +1,369 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "./generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model common_lists {
+  common_list_id                        Int            @id(map: "common_lists_pk") @default(autoincrement())
+  table_name                            String         @db.VarChar(255)
+  display_text                          String         @db.VarChar(255)
+  value_text                            String         @db.VarChar(1000)
+  parent_common_list_id                 Int?
+  sort_order                            Int
+  status                                String         @db.VarChar(100)
+  info_1                                String?        @db.VarChar(500)
+  info_2                                String?        @db.VarChar(500)
+  info_3                                String?        @db.VarChar(100)
+  info_4                                String?        @db.VarChar(100)
+  created_by                            Int?
+  created_date                          DateTime       @db.Timestamptz(6)
+  modified_by                           Int?
+  modified_date                         DateTime?      @db.Timestamptz(6)
+  users_common_lists_created_byTousers  users?         @relation("common_lists_created_byTousers", fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "common_lists_created_by_fk")
+  users_common_lists_modified_byTousers users?         @relation("common_lists_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "common_lists_modified_by_fk")
+  common_lists                          common_lists?  @relation("common_listsTocommon_lists", fields: [parent_common_list_id], references: [common_list_id], onDelete: NoAction, onUpdate: NoAction, map: "common_lists_parent_id_fk")
+  other_common_lists                    common_lists[] @relation("common_listsTocommon_lists")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model complaints {
+  complaint_id                        Int       @id @default(autoincrement())
+  complaint_code                      String    @unique(map: "complaint_code_unique_key") @db.VarChar(30)
+  title                               String    @db.VarChar(100)
+  description                         String?
+  category                            String    @db.VarChar(100)
+  status                              String    @db.VarChar(100)
+  priority                            String    @db.VarChar(100)
+  attachment_id                       Int?
+  assigned_to                         Int?
+  resolved_by                         Int?
+  resolved_date                       DateTime? @db.Timestamptz(6)
+  resolved_remarks                    String?   @db.VarChar(500)
+  response_message                    String?
+  is_escalated                        Boolean?  @default(false)
+  created_by                          Int
+  created_date                        DateTime  @default(now()) @db.Timestamptz(6)
+  modified_by                         Int?
+  modified_date                       DateTime? @db.Timestamptz(6)
+  users_complaints_assigned_toTousers users?    @relation("complaints_assigned_toTousers", fields: [assigned_to], references: [user_id], onUpdate: NoAction, map: "complaints_assigned_to_fk")
+  users_complaints_created_byTousers  users     @relation("complaints_created_byTousers", fields: [created_by], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "complaints_created_by_fk")
+  users_complaints_modified_byTousers users?    @relation("complaints_modified_byTousers", fields: [modified_by], references: [user_id], onUpdate: NoAction, map: "complaints_modified_by_fk")
+  users_complaints_resolved_byTousers users?    @relation("complaints_resolved_byTousers", fields: [resolved_by], references: [user_id], onUpdate: NoAction, map: "complaints_resolved_by_fk")
+}
+
+model configurations {
+  configuration_id Int       @id
+  setting_key      String    @unique @db.VarChar(100)
+  setting_value    String    @db.VarChar(2000)
+  description      String?   @db.VarChar(100)
+  is_active        Boolean   @default(true)
+  created_by       Int
+  created_date     DateTime  @db.Timestamptz(6)
+  modified_by      Int?
+  modified_date    DateTime? @db.Timestamptz(6)
+  internal_key     String    @db.VarChar(50)
+  concurrency_key  String    @db.VarChar(50)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model documents {
+  document_id                        Int         @id(map: "documents_pk") @default(autoincrement())
+  document_name                      String      @db.VarChar(255)
+  extension_name                     String      @db.VarChar(32)
+  document_type                      String      @db.VarChar(100)
+  mime_type                          String?     @db.VarChar(255)
+  file_size                          BigInt?
+  checksum                           String?     @db.VarChar(128)
+  storage_provider                   String      @default("local") @db.VarChar(50)
+  storage_key                        String
+  cloud_url                          String?
+  is_public                          Boolean     @default(false)
+  status                             String      @default("active") @db.VarChar(50)
+  is_deleted                         Boolean     @default(false)
+  deleted_at                         DateTime?   @db.Timestamptz(6)
+  deleted_by                         Int?
+  created_by                         Int?
+  created_date                       DateTime    @db.Timestamptz(6)
+  modified_by                        Int?
+  modified_date                      DateTime?   @db.Timestamptz(6)
+  users_documents_created_byTousers  users?      @relation("documents_created_byTousers", fields: [created_by], references: [user_id], onUpdate: NoAction, map: "documents_created_by_fk")
+  users_documents_modified_byTousers users?      @relation("documents_modified_byTousers", fields: [modified_by], references: [user_id], onUpdate: NoAction, map: "documents_modified_by_fk")
+  users_documents_deleted_byTousers  users?      @relation("documents_deleted_byTousers", fields: [deleted_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "documents_users_fk")
+  user_docs                          user_docs[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model email_queues {
+  email_queue_id     Int       @id @default(autoincrement())
+  smtp_account_name  String    @db.VarChar
+  from_email         String    @db.VarChar
+  to_email_list      String    @db.VarChar
+  cc_email_list      String?   @db.VarChar
+  bcc_email_list     String?   @db.VarChar
+  subject_text       String    @db.VarChar
+  body_html          String
+  body_text          String?
+  send_status        String    @db.VarChar(20)
+  queued_at          DateTime? @default(now()) @db.Timestamptz(6)
+  sent_date_time     DateTime? @db.Timestamptz(6)
+  processed_at       DateTime? @db.Timestamptz(6)
+  failed_at          DateTime? @db.Timestamptz(6)
+  error_text         String?
+  retry_count        Int?      @default(0)
+  last_retry_time    DateTime? @db.Timestamptz(6)
+  priority           Int?      @default(3) @db.SmallInt
+  email_type         String?   @db.VarChar(50)
+  template_id        Int?
+  template_variables Json?
+  created_by         Int
+  created_date       DateTime  @db.Timestamptz(6)
+  modified_by        Int?
+  modified_date      DateTime? @db.Timestamptz(6)
+  users              users     @relation(fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "email_queues_created_by_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model external_service_logs {
+  external_service_logs_id                       Int       @id(map: "external_service_logs_pk") @default(autoincrement())
+  internal_request_id                            String?   @db.VarChar(50)
+  api_request_id                                 String?   @db.VarChar(100)
+  user_id                                        Int?
+  service_name                                   String    @db.VarChar(100)
+  service_http_method                            String    @db.VarChar(10)
+  service_url                                    String    @db.VarChar(500)
+  request_payload                                Json
+  response_payload                               Json?
+  status                                         String    @db.VarChar(20)
+  error_message                                  String?
+  duration_ms                                    Int?
+  header_data                                    Json?
+  info_1                                         String?
+  info_2                                         String?   @db.VarChar(255)
+  info_3                                         String?   @db.VarChar(255)
+  info_4                                         String?   @db.VarChar(255)
+  created_by                                     Int?
+  created_date                                   DateTime  @db.Timestamptz(6)
+  modified_by                                    Int?
+  modified_date                                  DateTime? @db.Timestamptz(6)
+  users_external_service_logs_created_byTousers  users?    @relation("external_service_logs_created_byTousers", fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "external_service_logs_created_by_fk")
+  users_external_service_logs_modified_byTousers users?    @relation("external_service_logs_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "external_service_logs_modified_by_fk")
+  users_external_service_logs_user_idTousers     users?    @relation("external_service_logs_user_idTousers", fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "external_service_logs_users_fk")
+
+  @@index([service_name], map: "idx_api_name")
+  @@index([api_request_id], map: "idx_request_id")
+  @@index([user_id], map: "idx_user_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model idempotency_keys {
+  idempotency_key_id Int       @id @default(autoincrement())
+  idempotency_key    String    @unique(map: "idempotency_keys_unique_key") @db.VarChar(200)
+  user_id            Int?
+  user_service_id    String?
+  request_hash       String?
+  status             String    @db.VarChar(20)
+  response_code      Int?
+  response_body      Json?
+  created_date       DateTime  @db.Timestamptz(6)
+  modified_date      DateTime? @db.Timestamptz(6)
+  expire_at          DateTime? @db.Timestamptz(6)
+
+  @@unique([idempotency_key, user_id], map: "ux_idempotency_key_user_endpoint")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model login_histories {
+  login_history_id Int      @id(map: "login_history_id_pk") @default(autoincrement())
+  user_id          Int?
+  event_type       String   @db.VarChar(100)
+  ip_address       String   @db.VarChar(100)
+  user_agent       String   @db.VarChar(255)
+  latitude         String?  @db.VarChar(40)
+  longitude        String?  @db.VarChar(40)
+  device_type      String?  @db.VarChar(50)
+  created_by       Int?
+  created_date     DateTime @db.Timestamptz(6)
+  meta_info        String?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model page_action_permissions {
+  page_action_permission_id Int       @id(map: "page_action_permissions_pk") @default(autoincrement())
+  page_code                 String    @db.VarChar(100)
+  action_code               String    @db.VarChar(100)
+  role_id                   Int
+  user_id                   Int?
+  accessibility             String    @db.VarChar(50)
+  created_by                Int?
+  created_date              DateTime  @db.Timestamptz(6)
+  modified_by               Int?
+  modified_date             DateTime? @db.Timestamptz(6)
+  users                     users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "page_action_permissions_created_by_fk")
+  roles                     roles     @relation(fields: [role_id], references: [role_id], onDelete: Cascade, onUpdate: NoAction, map: "page_action_permissions_role_id_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model page_actions {
+  page_action_id                        Int       @id(map: "page_action_pk") @default(autoincrement())
+  page_code                             String    @db.VarChar(100)
+  action_code                           String    @db.VarChar(100)
+  accessibility                         String    @db.VarChar(10)
+  remarks                               String    @db.VarChar(255)
+  created_by                            Int
+  created_date                          DateTime  @db.Timestamptz(6)
+  modified_by                           Int?
+  modified_date                         DateTime? @db.Timestamptz(6)
+  page_id                               Int?
+  users_page_actions_created_byTousers  users     @relation("page_actions_created_byTousers", fields: [created_by], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "page_actions_created_by_fk")
+  users_page_actions_modified_byTousers users?    @relation("page_actions_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "page_actions_modified_by_fk")
+  pages                                 pages?    @relation(fields: [page_id], references: [page_id], onDelete: Cascade, onUpdate: NoAction, map: "page_actions_pages_fk")
+}
+
+model pages {
+  page_id                        Int            @id(map: "pages_pk") @default(autoincrement())
+  page_code                      String         @db.VarChar(100)
+  page_name                      String         @db.VarChar(100)
+  parent_page_code               String?        @db.VarChar(100)
+  icon_code                      String?        @db.VarChar(100)
+  page_type_code                 String?        @db.VarChar(100)
+  description                    String?        @db.VarChar(100)
+  active_from                    DateTime?      @db.Timestamptz(6)
+  active_to                      DateTime?      @db.Timestamptz(6)
+  created_by                     Int
+  created_date                   DateTime       @db.Timestamptz(6)
+  modified_by                    Int?
+  modified_date                  DateTime?      @db.Timestamptz(6)
+  page_actions                   page_actions[]
+  users_pages_modified_byTousers users?         @relation("pages_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "pages_created_by_fk")
+  users_pages_created_byTousers  users          @relation("pages_created_byTousers", fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "pages_modified_by_fk")
+}
+
+model roles {
+  role_id                        Int                       @id(map: "roles_pk") @default(autoincrement())
+  role_code                      String                    @unique(map: "roles_code_unique") @db.VarChar(100)
+  role_name                      String                    @db.VarChar(100)
+  active_from                    DateTime?                 @db.Timestamptz(6)
+  active_to                      DateTime?                 @db.Timestamptz(6)
+  created_by                     Int?
+  created_date                   DateTime                  @db.Timestamptz(6)
+  modified_by                    Int?
+  modified_date                  DateTime?                 @db.Timestamptz(6)
+  page_action_permissions        page_action_permissions[]
+  users_roles_created_byTousers  users?                    @relation("roles_created_byTousers", fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "roles_created_by_fk")
+  users_roles_modified_byTousers users?                    @relation("roles_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "roles_modified_by_fk")
+}
+
+model user_docs {
+  user_doc_id Int       @id(map: "user_docs_pk") @default(autoincrement())
+  user_id     Int
+  document_id Int
+  documents   documents @relation(fields: [document_id], references: [document_id], onDelete: Cascade, onUpdate: NoAction, map: "user_docs_documents_fk")
+  users       users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "user_docs_user_id_fk")
+}
+
+model user_profiles {
+  user_id                                Int       @id(map: "user_profiles_pk")
+  gender                                 String    @db.VarChar(10)
+  full_address                           String    @db.VarChar(255)
+  city                                   String    @db.VarChar(100)
+  district                               String    @db.VarChar(100)
+  state                                  String    @db.VarChar(100)
+  pincode                                String    @db.VarChar(10)
+  latitude                               Decimal?  @default(0) @db.Decimal(9, 6)
+  longitude                              Decimal?  @default(0) @db.Decimal(9, 6)
+  pan_number                             String    @unique(map: "user_unique_pan_number") @db.VarChar(20)
+  aadhar_number                          String    @unique(map: "user_unique_aadhar_number") @db.VarChar(20)
+  gst_number                             String    @unique(map: "user_unique_gst_number") @db.VarChar(20)
+  agreement_text                         String    @db.VarChar(255)
+  agreement_accepted                     Boolean   @default(false)
+  kyc_verified                           Boolean   @default(false)
+  status                                 String    @db.VarChar(20)
+  bank_account_holder_name               String    @db.VarChar(150)
+  bank_name                              String    @db.VarChar(150)
+  bank_account_number                    String    @db.VarChar(50)
+  bank_acc_type                          String    @db.VarChar(50)
+  bank_ifsc_code                         String    @db.VarChar(20)
+  bank_verify_status                     String?   @db.VarChar(20)
+  is_bank_verified                       Boolean?  @default(false)
+  shop_name                              String    @db.VarChar(100)
+  shop_full_address                      String    @db.VarChar(500)
+  shop_city                              String    @db.VarChar(50)
+  shop_state                             String    @db.VarChar(100)
+  shop_district                          String    @db.VarChar(120)
+  shop_pincode                           String    @db.VarChar(10)
+  extra_info                             String?
+  created_by                             Int
+  created_date                           DateTime  @db.Timestamptz(6)
+  modified_by                            Int?
+  modified_date                          DateTime? @db.Timestamptz(6)
+  users_user_profiles_user_idTousers     users     @relation("user_profiles_user_idTousers", fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "user_profiles_created_by_fk")
+  users_user_profiles_modified_byTousers users?    @relation("user_profiles_modified_byTousers", fields: [modified_by], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "user_profiles_modified_by_fk")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user_sessions {
+  user_session_id Int       @id(map: "user_sessions_pk") @default(autoincrement())
+  user_id         Int?
+  session_id      String    @unique
+  session_token   String
+  refresh_token   String    @db.VarChar
+  expires_at      DateTime  @db.Timestamptz(6)
+  is_revoked      Boolean   @default(false)
+  revoked_at      DateTime? @db.Timestamptz(6)
+  created_by      Int
+  created_date    DateTime  @default(now()) @db.Timestamptz(6)
+  users           users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_sessions_created_by_fk")
+
+  @@index([refresh_token], map: "idx_user_sessions_refresh_token")
+  @@index([session_token], map: "idx_user_sessions_session_token")
+  @@index([user_id], map: "idx_user_sessions_user_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model users {
+  user_id                                                        Int                       @id(map: "users_pk") @default(autoincrement())
+  user_name                                                      String                    @db.VarChar(100)
+  user_password                                                  String                    @db.VarChar(100)
+  mobile_no                                                      String                    @db.VarChar(100)
+  email_id                                                       String                    @unique(map: "users_unique") @db.VarChar(255)
+  parent_user_id                                                 Int?
+  role_id                                                        Int
+  is_active                                                      Boolean
+  first_name                                                     String                    @db.VarChar(100)
+  last_name                                                      String                    @db.VarChar(100)
+  last_password_changed_date                                     DateTime?                 @db.Timestamptz(6)
+  created_by                                                     Int?
+  created_date                                                   DateTime                  @db.Timestamptz(6)
+  modified_by                                                    Int?
+  modified_date                                                  DateTime?                 @db.Timestamptz(6)
+  user_code                                                      String                    @unique(map: "user_code_unique_key") @db.VarChar(50)
+  common_lists_common_lists_created_byTousers                    common_lists[]            @relation("common_lists_created_byTousers")
+  common_lists_common_lists_modified_byTousers                   common_lists[]            @relation("common_lists_modified_byTousers")
+  complaints_complaints_assigned_toTousers                       complaints[]              @relation("complaints_assigned_toTousers")
+  complaints_complaints_created_byTousers                        complaints[]              @relation("complaints_created_byTousers")
+  complaints_complaints_modified_byTousers                       complaints[]              @relation("complaints_modified_byTousers")
+  complaints_complaints_resolved_byTousers                       complaints[]              @relation("complaints_resolved_byTousers")
+  documents_documents_created_byTousers                          documents[]               @relation("documents_created_byTousers")
+  documents_documents_modified_byTousers                         documents[]               @relation("documents_modified_byTousers")
+  documents_documents_deleted_byTousers                          documents[]               @relation("documents_deleted_byTousers")
+  email_queues                                                   email_queues[]
+  external_service_logs_external_service_logs_created_byTousers  external_service_logs[]   @relation("external_service_logs_created_byTousers")
+  external_service_logs_external_service_logs_modified_byTousers external_service_logs[]   @relation("external_service_logs_modified_byTousers")
+  external_service_logs_external_service_logs_user_idTousers     external_service_logs[]   @relation("external_service_logs_user_idTousers")
+  page_action_permissions                                        page_action_permissions[]
+  page_actions_page_actions_created_byTousers                    page_actions[]            @relation("page_actions_created_byTousers")
+  page_actions_page_actions_modified_byTousers                   page_actions[]            @relation("page_actions_modified_byTousers")
+  pages_pages_modified_byTousers                                 pages[]                   @relation("pages_modified_byTousers")
+  pages_pages_created_byTousers                                  pages[]                   @relation("pages_created_byTousers")
+  roles_roles_created_byTousers                                  roles[]                   @relation("roles_created_byTousers")
+  roles_roles_modified_byTousers                                 roles[]                   @relation("roles_modified_byTousers")
+  user_docs                                                      user_docs[]
+  user_profiles_user_profiles_user_idTousers                     user_profiles?            @relation("user_profiles_user_idTousers")
+  user_profiles_user_profiles_modified_byTousers                 user_profiles[]           @relation("user_profiles_modified_byTousers")
+  user_sessions                                                  user_sessions[]
 }

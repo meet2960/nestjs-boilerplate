@@ -57,7 +57,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /tsconfig.build.tsbuildinfo
 
-/prisma
+prisma/generated
 
 # prisma generated junk (optional safety)
 prisma.config.d.ts

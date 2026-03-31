@@ -1,6 +1,5 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { TOP_LEVEL_PROJECT_ROOT } from '@/common/utility/paths';
 
 export const emailTemplatePath = {
   forgotPassword: 'reset-password.hbs',
@@ -11,7 +10,7 @@ export const emailTemplatePath = {
 export async function readFileAsString(filePath: string): Promise<string> {
   try {
     const emailTemplate = path.join(
-      TOP_LEVEL_PROJECT_ROOT,
+      __dirname,
       'public',
       'email-templates',
       `${filePath}`,

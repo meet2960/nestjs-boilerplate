@@ -11,7 +11,6 @@ import { ApiConfigService } from './shared/services/api-config.service';
 import { AppController } from './app.controller';
 import { excludeRoutesFromMiddleware } from './common/constants/exclude-route-list';
 import { LoggerMiddleware } from './middlewares';
-// import { I18nModule } from './modules/helpers/i18n/i18n.module';
 import { SharedModule } from './shared/shared.module';
 
 @Module({
@@ -68,6 +67,6 @@ export class AppModule {
     consumer
       .apply(ClsMiddleware, LoggerMiddleware)
       .exclude(...excludeRoutesFromMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+      .forRoutes({ path: '*path', method: RequestMethod.ALL });
   }
 }

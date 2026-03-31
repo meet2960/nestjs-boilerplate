@@ -1,8 +1,10 @@
-# Resources
+# Useful CLI Commands Resources
 
-## Code Command Snippets
+### Find Circular Dependency
 
+```bash
 npx madge --circular src/main.ts
+```
 
 ### Install NestJs Globally
 
@@ -56,7 +58,27 @@ openssl rand -hex 32
 npx typeorm-model-generator -h 127.0.0.1 -d bill-payments-1 -u postgres -x meet@123 -e postgres -o ./src/common/model-generator --no-config
 ```
 
-## Database Resources
+# Prisma Commands
+
+### Initialize Prisma
+
+```bash
+npx prisma init
+```
+
+### Pull Schema from DB
+
+```bash
+npx prisma db pull
+```
+
+### Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+# Database Resources
 
 ### Backup DB in Windows (Run in PowerShell)
 
@@ -80,7 +102,7 @@ PGPASSWORD="mypostgrespass" pg_dump -h localhost -p 5432 -U postgres -d bill-pay
 scp -i my-key.pem ec2-user@3.110.12.123:/home/ec2-user/bill.backup .
 ```
 
-## Docker Resources
+# Docker Resources
 
 ### Build Docker
 

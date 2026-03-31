@@ -15,7 +15,7 @@ import type { IUserSession } from '@/common/entity/IUserSession';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ChangeTpinDto } from './dto/change-tpin.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
-import { UserLoginDto } from './dto/user-login.dto';
+import type { UserLoginDto } from './dto/user-login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import {
   AuthMethodDecorator,

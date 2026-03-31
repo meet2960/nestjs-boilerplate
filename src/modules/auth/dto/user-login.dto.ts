@@ -1,34 +1,23 @@
-import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { EmailField, StringField } from '@/decorators';
-import { UserLoginExtraFieldsDto } from './user-login-extra-info.dto';
-import { ApiProperty } from '@nestjs/swagger';
+import { z } from 'zod';
 
-export class UserLoginDto {
-  @StringField({
-    minLength: 1,
-    maxLength: 100,
-    swagger: true,
-    description: 'User Email',
-    default: '',
-  })
-  @EmailField()
-  @IsNotEmpty()
-  readonly email!: string;
+const latitudeRegex = /^-?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)$/;
+const longitudeRegex = /^-?(?:180(?:\.0+)?|(?:1[0-7]\d|[1-9]?\d)(?:\.\d+)?)$/;
 
-  @StringField({
-    minLength: 1,
-    maxLength: 150,
-    swagger: true,
-    description: 'User Password',
-    default: '',
-  })
-  @IsNotEmpty()
-  readonly password!: string;
+export const UserLoginExtraFieldsZodSchema = z.object({
+  latitude: z.string().min(1).max(40).regex(latitudeRegex, 'Invalid latitude'),
+  longitude: z
+    .string()
+    .min(1)
+    .max(40)
+    .regex(longitudeRegex, 'Invalid longitude'),
+  device_type: z.string().min(1).max(50),
+});
 
-  @ValidateNested({ each: true })
-  @IsNotEmpty()
-  @Type(() => UserLoginExtraFieldsDto)
-  @ApiProperty({ type: () => UserLoginExtraFieldsDto })
-  extra_info!: UserLoginExtraFieldsDto;
-}
+export const UserLoginZodSchema = z.object({
+  email: z.string().min(1).max(100).email(),
+  password: z.string().min(1).max(150),
+  extra_info: UserLoginExtraFieldsZodSchema,
+});
+
+export type IUserLogin = z.infer<typeof UserLoginZodSchema>;
+export type UserLoginDto = IUserLogin;

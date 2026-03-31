@@ -1,7 +1,10 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import z from 'zod';
 
-export class VerifyEmailDto {
-  @IsNotEmpty()
-  @IsEmail()
+export const VerifyEmailZodSchema = z.object({
+  email: z.email(),
+});
+export type IVerifyEmail = z.infer<typeof VerifyEmailZodSchema>;
+
+export class VerifyEmailDto implements IVerifyEmail {
   email!: string;
 }

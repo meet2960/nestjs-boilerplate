@@ -31,7 +31,6 @@ import {
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ChangeTpinDto } from './dto/change-tpin.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
-import { TokenPayloadDto } from './dto/token-payload.dto';
 import { type UserLoginDto } from './dto/user-login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import type { LoginHistoryEntity } from '../api/admin/login-history/entities/login-history.entity';
@@ -108,12 +107,12 @@ export class AuthService {
     };
 
     const expirationTIme = this.configService.authConfig.jwtExpirationTime;
-    const createdToken = new TokenPayloadDto({
+    const createdToken = {
       expiresIn: expirationTIme,
       token: await this.jwtService.signAsync(tokenPayload, {
         expiresIn: expirationTIme,
       }),
-    });
+    };
 
     return createdToken;
   }

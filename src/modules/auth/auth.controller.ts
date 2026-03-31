@@ -1,19 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import type { IUserSession } from '@/common/entity/IUserSession';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { ChangeTpinDto } from './dto/change-tpin.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
 import type { UserLoginDto } from './dto/user-login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
@@ -58,14 +48,6 @@ export class AuthController {
     res.status(response.statusCode).json(response);
   }
 
-  @Post('register')
-  @ApiOperation({ summary: 'Register User' })
-  @HttpCode(HttpStatus.OK)
-  async register(@Body() data: any, @Res() res: Response) {
-    const response = await this.authService.registerUser(data);
-    res.status(response.statusCode).json(response);
-  }
-
   @Post('verify-token')
   @ApiOperation({ summary: 'Verify User Token' })
   @AuthMethodDecorator()
@@ -98,22 +80,6 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const response = await this.authService.changePassword(data, user);
-    res.status(response.statusCode).json(response);
-  }
-
-  @Post('change-tpin')
-  @ApiOperation({ summary: 'Change User TPIN' })
-  @PermissionDecorator({
-    action: ActionCode.manage,
-    subject: PageCode.change_tpin,
-  })
-  @AuthMethodDecorator()
-  async changeTpin(
-    @Body() data: ChangeTpinDto,
-    @AuthUser() user: IUserSession,
-    @Res() res: Response,
-  ) {
-    const response = await this.authService.changeTpin(data, user);
     res.status(response.statusCode).json(response);
   }
 

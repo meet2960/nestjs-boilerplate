@@ -84,8 +84,8 @@ export class ApiConfigService {
 
   get postgresConfig() {
     const entities = [
-      path.join(import.meta.dirname, `../../modules/**/*.entity{,.js}`),
-      path.join(import.meta.dirname, `../../modules/**/*.view-entity{,.js}`),
+      path.join(__dirname, `../../modules/**/*.entity{,.js}`),
+      path.join(__dirname, `../../modules/**/*.view-entity{,.js}`),
     ];
 
     return {
@@ -150,38 +150,6 @@ export class ApiConfigService {
   get appConfig() {
     return {
       port: this.getString('PORT'),
-    };
-  }
-
-  get branchXApiConfig() {
-    return {
-      baseUrl: this.getString('BRANCH_X_API_BASE_URL'),
-      apiToken: this.getString('BRANCH_X_API_TOKEN'),
-    };
-  }
-
-  get instantPayApiConfig() {
-    return {
-      baseUrl: this.getString('INSTANT_PAY_API_BASE_URL'),
-      authCode: this.getString('INSTANT_PAY_API_AUTH_CODE'),
-      clientId: this.getString('INSTANT_PAY_API_CLIENT_ID'),
-      encryptionKey: this.getString('INSTANT_PAY_API_ENCRYPTION_KEY'),
-      clientSecret: this.getString('INSTANT_PAY_API_CLIENT_SECRET'),
-      outletId: this.getString('INSTANT_PAY_API_OUTLET_ID'),
-      endpointIp: this.getString('INSTANT_PAY_API_ENDPOINT_IP'),
-    };
-  }
-
-  get digiSevaApiConfig() {
-    return {
-      baseUrl: this.getString('DIGI_SEVA_API_BASE_URL'),
-      apiKey: this.getString('DIGI_SEVA_API_KEY'),
-      apiUserCode: this.getString('DIGI_SEVA_API_USER_CODE'),
-      apiAccessMode: this.getString('DIGI_SEVA_API_ACCESS_MODE'),
-      apiPartnerId: this.getNumber('DIGI_SEVA_API_PARTNER_ID'),
-      apiThankYouPageRedirectUrl: this.getString(
-        'DIGI_SEVA_API_THANKYOU_PAGE_REDIRECT_URL',
-      ),
     };
   }
 

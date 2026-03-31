@@ -14,17 +14,14 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { EncryptionInterceptor } from './interceptors/encrypt-response-interceptor.service';
-import { TranslationInterceptor } from './interceptors/translation-interceptor.service';
-import { MetricsService } from './modules/helpers/metrics/metrics.service';
+// import { TranslationInterceptor } from './interceptors/translation-interceptor.service';
 import { ApiConfigService } from './shared/services/api-config.service';
-import { TranslationService } from './shared/services/translation.service';
+// import { TranslationService } from './shared/services/translation.service';
 import { AppModule } from './app.module';
-import './boilerplate.polyfill';
 import { ApplicationSharedData } from './config/shared-data/application-shared-data';
 import { setupSwagger } from './config/swagger/setup-swagger';
 import { GlobalHttpExceptionFilter } from './filters/global-http-exception.filter';
 import { UnprocessableEntityExceptionFilter } from './filters/unprocessable-entity.filter';
-import { MetricsInterceptor } from './interceptors/metrics.interceptor';
 import { EncryptResponseMiddleware } from './middlewares/encrypt-response.middleware';
 import { SharedModule } from './shared/shared.module';
 
@@ -76,9 +73,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(reflector),
-    new TranslationInterceptor(
-      app.select(SharedModule).get(TranslationService),
-    ),
+    // new TranslationInterceptor(
+    //   app.select(SharedModule).get(TranslationService),
+    // ),
   );
 
   app.useGlobalPipes(
@@ -120,12 +117,6 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   // Starts listening for shutdown hooks
   if (!configService.isDevelopment) {
     app.enableShutdownHooks();
-  }
-
-  const enableMonitoring = true;
-  if (enableMonitoring) {
-    const metricsService = app.get(MetricsService);
-    app.useGlobalInterceptors(new MetricsInterceptor(metricsService));
   }
 
   const port = configService.appConfig.port;

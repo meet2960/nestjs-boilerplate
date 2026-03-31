@@ -5,18 +5,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { type Response } from 'express';
 import { ClsModule, ClsMiddleware } from 'nestjs-cls';
-import {
-  AcceptLanguageResolver,
-  HeaderResolver,
-  I18nModule,
-  QueryResolver,
-} from 'nestjs-i18n';
 import path from 'node:path';
 import { AppService } from './app.service';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { AppController } from './app.controller';
 import { excludeRoutesFromMiddleware } from './common/constants/exclude-route-list';
 import { LoggerMiddleware } from './middlewares';
+// import { I18nModule } from './modules/helpers/i18n/i18n.module';
 import { SharedModule } from './shared/shared.module';
 
 @Module({
@@ -40,24 +35,8 @@ import { SharedModule } from './shared/shared.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    I18nModule.forRootAsync({
-      useFactory: (configService: ApiConfigService) => ({
-        fallbackLanguage: configService.fallbackLanguage,
-        loaderOptions: {
-          path: path.join(import.meta.dirname, 'i18n/'),
-          watch: configService.isDevelopment,
-        },
-      }),
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-        new HeaderResolver(['x-lang']),
-      ],
-      imports: [SharedModule],
-      inject: [ApiConfigService],
-    }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(import.meta.dirname, '..', 'logs'),
+      rootPath: path.join(__dirname, '..', 'logs'),
       serveRoot: '/logs',
       serveStaticOptions: {
         fallthrough: true,
@@ -69,7 +48,7 @@ import { SharedModule } from './shared/shared.module';
       },
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(import.meta.dirname, '..', 'public'),
+      rootPath: path.join(__dirname, '..', 'public'),
       serveRoot: '/public',
       serveStaticOptions: {
         fallthrough: true,

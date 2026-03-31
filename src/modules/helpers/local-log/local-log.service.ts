@@ -10,7 +10,7 @@ export class LocalLogService {
     // private readonly emailService: EmailSenderService,
   ) {}
   private readonly logsDirectory = path.join(
-    import.meta.dirname,
+    __dirname,
     '..',
     '..',
     '..',

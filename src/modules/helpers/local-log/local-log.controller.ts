@@ -27,7 +27,7 @@ import { ListLocalLogsDto } from './dto/list-local-logs.dto';
 // @AuthDecorator()
 export class LocalLogController {
   private readonly logsDirectory = path.join(
-    import.meta.dirname,
+    __dirname,
     '..',
     '..',
     '..',

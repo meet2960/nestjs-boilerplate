@@ -4,14 +4,16 @@ import type { HealthCheckResult } from '@nestjs/terminus';
 import {
   HealthCheck,
   HealthCheckService,
-  TypeOrmHealthIndicator,
+  PrismaHealthIndicator,
 } from '@nestjs/terminus';
+import { PrismadbService } from '../helpers/prismadb/prismadb.service';
 
 @Controller('health')
 export class HealthCheckerController {
   constructor(
     private readonly healthCheckService: HealthCheckService,
-    private readonly ormIndicator: TypeOrmHealthIndicator,
+    private readonly ormIndicator: PrismaHealthIndicator,
+    private readonly prisma: PrismadbService,
   ) {}
 
   @Get()
@@ -19,7 +21,8 @@ export class HealthCheckerController {
   @ApiOperation({ summary: 'Check the health of the application' })
   async check(): Promise<HealthCheckResult> {
     return this.healthCheckService.check([
-      () => this.ormIndicator.pingCheck('database', { timeout: 1500 }),
+      () =>
+        this.ormIndicator.pingCheck('database', this.prisma, { timeout: 1500 }),
     ]);
   }
 }

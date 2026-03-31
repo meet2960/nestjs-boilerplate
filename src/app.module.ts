@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module, RequestMethod, type MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -11,10 +12,21 @@ import { ApiConfigService } from './shared/services/api-config.service';
 import { AppController } from './app.controller';
 import { excludeRoutesFromMiddleware } from './common/constants/exclude-route-list';
 import { LoggerMiddleware } from './middlewares';
+import { AuthModule } from './modules/auth/auth.module';
+import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
+import { CaslModule } from './modules/helpers/casl/casl.module';
+import { PrismadbModule } from './modules/helpers/prismadb/prismadb.module';
+import { ResponseTypeModule } from './modules/helpers/response-type/response-type.module';
+import { SocketioModule } from './modules/helpers/socketio/socketio.module';
+import { WinstonLoggerModule } from './modules/helpers/winston-logger/winston-logger.module';
 import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 6 * 60 * 60 * 1000, // 6 hours in milliseconds
+      isGlobal: true,
+    }),
     ClsModule.forRoot({
       global: true,
       middleware: {
@@ -58,6 +70,13 @@ import { SharedModule } from './shared/shared.module';
         },
       },
     }),
+    HealthCheckerModule,
+    ResponseTypeModule,
+    WinstonLoggerModule,
+    SocketioModule,
+    CaslModule,
+    AuthModule,
+    PrismadbModule,
   ],
   controllers: [AppController],
   providers: [AppService],

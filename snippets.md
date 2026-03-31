@@ -78,6 +78,12 @@ npx prisma db pull
 npx prisma generate
 ```
 
+### Run Prisma Studio
+
+```bash
+npx prisma studio
+```
+
 # Database Resources
 
 ### Backup DB in Windows (Run in PowerShell)

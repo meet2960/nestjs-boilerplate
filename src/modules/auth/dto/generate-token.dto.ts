@@ -1,25 +1,15 @@
-import { StringField } from '@/decorators';
-import { Type } from 'class-transformer';
-import { IsObject } from 'class-validator';
+import { z } from 'zod';
 
-export class GenerateTokenDto {
-  @StringField({
-    example: '',
-    description: 'The secret key to sign the token with',
-    required: true,
-    default: '',
-  })
+export const GenerateTokenSchema = z.object({
+  secretKey: z.string().min(1, 'Secret key is required'),
+  data: z.record(z.string(), z.unknown()),
+  algorithm: z.string().default('HS256'),
+});
+
+export type IGenerateToken = z.infer<typeof GenerateTokenSchema>;
+
+export class GenerateTokenDto implements IGenerateToken {
   secretKey!: string;
-
-  @IsObject()
-  @Type(() => Object)
-  data!: Record<string, any>;
-
-  @StringField({
-    example: 'HS256',
-    description: 'The algorithm to sign the token with',
-    required: false,
-    default: 'HS256',
-  })
+  data!: Record<string, unknown>;
   algorithm!: string;
 }

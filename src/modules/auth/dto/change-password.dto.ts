@@ -1,30 +1,15 @@
-import { StringField } from '@/decorators';
+import { z } from 'zod';
 
-export class ChangePasswordDto {
-  @StringField({
-    minLength: 1,
-    maxLength: 100,
-    swagger: true,
-    description: 'Current Password',
-    default: '',
-  })
+export const ChangePasswordZodSchema = z.object({
+  current_password: z.string().min(1).max(100),
+  new_password: z.string().min(1).max(100),
+  cnf_new_password: z.string().min(1).max(100),
+});
+
+export type IChangePassword = z.infer<typeof ChangePasswordZodSchema>;
+
+export class ChangePasswordDto implements IChangePassword {
   current_password!: string;
-
-  @StringField({
-    minLength: 1,
-    maxLength: 100,
-    swagger: true,
-    description: 'New Password',
-    default: '',
-  })
   new_password!: string;
-
-  @StringField({
-    minLength: 1,
-    maxLength: 100,
-    swagger: true,
-    description: 'Confirm New Password',
-    default: '',
-  })
   cnf_new_password!: string;
 }

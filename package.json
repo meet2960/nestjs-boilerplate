@@ -5,7 +5,6 @@
   "author": "MG",
   "private": true,
   "license": "UNLICENSED",
-  "type": "module",
   "scripts": {
     "start": "nest start",
     "dev": "nest start --watch",

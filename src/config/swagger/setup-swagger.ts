@@ -19,8 +19,7 @@ export function setupSwagger(app: INestApplication): void {
       description: 'JWT Authorization header using the Bearer scheme',
       bearerFormat: 'JWT',
     })
-    .addServer('http://localhost:8000', 'LOCAL')
-    .addServer('https://api.kliqpay.in', 'PROD');
+    .addServer('http://localhost:8000', 'LOCAL');
 
   if (process.env.API_VERSION) {
     documentBuilder.setVersion(process.env.API_VERSION);
@@ -36,25 +35,26 @@ export function setupSwagger(app: INestApplication): void {
     documentBuilder.build(),
     options,
   );
-  SwaggerModule.setup(GlobalConfig.SWAGGER_PATH, app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
+  SwaggerModule.setup(
+    GlobalConfig.SWAGGER_CONFIG.documentationRoutePath,
+    app,
+    document,
+    {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+      customSiteTitle: 'NestJs Boiler Plate APIs',
+      jsonDocumentUrl: GlobalConfig.SWAGGER_CONFIG.jsonDocRoutePath,
+      yamlDocumentUrl: GlobalConfig.SWAGGER_CONFIG.yamlDocRoutePath,
+      explorer: true,
+      swaggerUiEnabled: true,
     },
-    customSiteTitle: 'KP APIs',
-    jsonDocumentUrl: 'docs-json',
-    yamlDocumentUrl: 'docs-yaml',
-    explorer: true,
-    swaggerUiEnabled: true,
-  });
+  );
 
   app.use(
     '/reference',
     apiReference({
       content: document,
     }),
-  );
-
-  console.info(
-    `Documentation: http://localhost:${process.env.PORT}/${GlobalConfig.SWAGGER_PATH}`,
   );
 }

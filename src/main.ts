@@ -18,6 +18,7 @@ import { EncryptionInterceptor } from './interceptors/encrypt-response-intercept
 import { ApiConfigService } from './shared/services/api-config.service';
 // import { TranslationService } from './shared/services/translation.service';
 import { AppModule } from './app.module';
+import { GlobalConfig } from './config/global/global-config';
 import { ApplicationSharedData } from './config/shared-data/application-shared-data';
 import { setupSwagger } from './config/swagger/setup-swagger';
 import { GlobalHttpExceptionFilter } from './filters/global-http-exception.filter';
@@ -123,6 +124,9 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   await app.listen(port, '0.0.0.0', () => {});
 
   console.info(`Server Running at ${await app.getUrl()}`);
+  console.info(
+    `Documentation: http://localhost:${process.env.PORT}/${GlobalConfig.SWAGGER_CONFIG.documentationRoutePath}`,
+  );
 
   return app;
 }

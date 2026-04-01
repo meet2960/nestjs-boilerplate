@@ -16,13 +16,17 @@ export function cryptoRandomUUID() {
   return crypto.randomUUID();
 }
 
-export function generateRandomNumber(digits = 6): number {
+export function getRandomNumber() {
+  return crypto.randomInt(0, 1_000_000_001);
+}
+
+export function generateRandomDigits(digits = 6): string {
   if (!Number.isInteger(digits) || digits < 1 || digits > 10) {
     throw new Error('OTP length must be between 1 and 10 digits');
   }
-  const min = 10 ** (digits - 1);
   const max = 10 ** digits;
-  return crypto.randomInt(min, max);
+  const num = crypto.randomInt(0, max);
+  return num.toString().padStart(digits, '0');
 }
 
 const nanoOnlyAlphabets = customAlphabet(
@@ -66,11 +70,6 @@ export function generateNUuid(length: number) {
 export function generateTimeStampSeconds() {
   const timestamp = Math.floor(Date.now() / 1000);
   return timestamp;
-}
-
-export function getRandomNumber() {
-  const random = Math.round(Math.random() * 1_000_000_000);
-  return random;
 }
 
 export function getJwtExpirationTime(minutes: number): number {

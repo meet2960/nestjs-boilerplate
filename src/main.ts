@@ -33,12 +33,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   );
 
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://api.kliqpay.in',
-      'https://app.kliqpay.in',
-    ],
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
     methods: ['GET', 'POST', 'OPTIONS'],
     optionsSuccessStatus: 204,
     allowedHeaders: [
@@ -52,8 +47,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     credentials: true,
     maxAge: 86400,
   });
-  app.use(bodyParser.json({ limit: '100mb' }));
-  app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   app.use(cookieParser());
 
   app.enable('trust proxy', true); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)

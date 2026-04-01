@@ -8,6 +8,11 @@
       {
         "include": "public/**/*",
         "outDir": "dist"
+      },
+      {
+        "include": "i18n/**/*",
+        "outDir": "dist/i18n",
+        "watchAssets": true
       }
     ]
   }

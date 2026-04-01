@@ -6,6 +6,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { type Response } from 'express';
 import { ClsModule, ClsMiddleware } from 'nestjs-cls';
+import {
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
 import path from 'node:path';
 import { AppService } from './app.service';
 import { ApiConfigService } from './shared/services/api-config.service';
@@ -69,6 +75,22 @@ import { SharedModule } from './shared/shared.module';
           res.setHeader('Cache-Control', 'no-store');
         },
       },
+    }),
+    I18nModule.forRootAsync({
+      useFactory: (configService: ApiConfigService) => ({
+        fallbackLanguage: 'en',
+        loaderOptions: {
+          path: path.join(__dirname, '../i18n/'),
+          watch: configService.isDevelopment,
+        },
+      }),
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+        new HeaderResolver(['x-lang']),
+      ],
+      imports: [SharedModule],
+      inject: [ApiConfigService],
     }),
     HealthCheckerModule,
     ResponseTypeModule,

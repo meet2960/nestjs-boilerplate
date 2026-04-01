@@ -6,15 +6,7 @@ import { promisify } from 'node:util';
 import { v4 as uuidv4 } from 'uuid';
 import { SocketioGateway } from '../socketio/socketio.gateway';
 
-
-
-
-
-
-
-
-
-
+// TODO: add other extra from onenote
 const execAsync = promisify(exec);
 @Injectable()
 export class CommonMethodService {

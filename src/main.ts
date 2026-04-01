@@ -1,9 +1,4 @@
-import {
-  ClassSerializerInterceptor,
-  HttpStatus,
-  UnprocessableEntityException,
-  ValidationPipe,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -13,6 +8,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { EncryptionInterceptor } from './interceptors/encrypt-response-interceptor.service';
 // import { TranslationInterceptor } from './interceptors/translation-interceptor.service';
 import { ApiConfigService } from './shared/services/api-config.service';
@@ -22,7 +18,6 @@ import { GlobalConfig } from './config/global/global-config';
 import { ApplicationSharedData } from './config/shared-data/application-shared-data';
 import { setupSwagger } from './config/swagger/setup-swagger';
 import { GlobalHttpExceptionFilter } from './filters/global-http-exception.filter';
-import { UnprocessableEntityExceptionFilter } from './filters/unprocessable-entity.filter';
 import { EncryptResponseMiddleware } from './middlewares/encrypt-response.middleware';
 import { SharedModule } from './shared/shared.module';
 
@@ -63,7 +58,6 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   app.useGlobalFilters(
     new GlobalHttpExceptionFilter(reflector), // Handle all HTTP exceptions
-    new UnprocessableEntityExceptionFilter(reflector), // For Unprocessable Entity Exception Errors
     // new QueryFailedFilter(reflector), // TODO: Fix this Query Validation, with respect to Prisma Client Errors, and then add this filter back in
   );
 
@@ -74,16 +68,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     // ),
   );
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // strip unknown fields
-      forbidNonWhitelisted: true,
-      transform: true, // convert primitives
-      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-      dismissDefaultMessages: true,
-      exceptionFactory: (errors) => new UnprocessableEntityException(errors),
-    }),
-  );
+  app.useGlobalPipes(new ZodValidationPipe());
 
   if (!ApplicationSharedData.isDevelopmentMode()) {
     app.useGlobalInterceptors(new EncryptionInterceptor()); // NestJS Interceptor

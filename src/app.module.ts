@@ -1,6 +1,7 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module, RequestMethod, type MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -12,6 +13,7 @@ import {
   I18nModule,
   QueryResolver,
 } from 'nestjs-i18n';
+import { ZodValidationPipe, ZodSerializerInterceptor } from 'nestjs-zod';
 import path from 'node:path';
 import { AppService } from './app.service';
 import { ApiConfigService } from './shared/services/api-config.service';
@@ -101,7 +103,14 @@ import { SharedModule } from './shared/shared.module';
     PrismadbModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_PIPE, useClass: ZodValidationPipe },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ZodSerializerInterceptor,
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

@@ -6420,6 +6420,13 @@ nestjs-i18n@^10.6.0:
     js-yaml "^4.1.0"
     string-format "^2.0.0"
 
+nestjs-zod@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/nestjs-zod/-/nestjs-zod-5.2.1.tgz#5c8a4381ae0978fcc5f52421b864e5fe43506ebf"
+  integrity sha512-pGfOsLVcXJKB6vdh59YMN9o3hvaOKFISo1EU9IUCMGl5yb0JsvY6A0ZnNnTmwb8zs7o1cWwC8GeVrawvnL8/rw==
+  dependencies:
+    deepmerge "^4.3.1"
+
 node-abort-controller@^3.0.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-3.1.1.tgz#a94377e964a9a37ac3976d848cb5c765833b8548"

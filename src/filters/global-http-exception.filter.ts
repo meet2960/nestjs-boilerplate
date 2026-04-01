@@ -11,6 +11,8 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { Response } from 'express';
 import { get } from 'lodash-es';
+import { ZodValidationException } from 'nestjs-zod';
+import { ZodError } from 'zod';
 import type { IApiResponse } from '@/common/entity/IApiResponse';
 
 @Catch(HttpException)
@@ -39,6 +41,28 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
       return response.status(statusCode).json(customResponse);
     } else {
       switch (statusCode) {
+        case HttpStatus.BAD_REQUEST: {
+          customResponse.message = get(
+            exceptionResponse,
+            'message',
+            'Bad Request',
+          );
+          customResponse.status = 'BAD_REQUEST';
+          customResponse.data = null;
+          if (exception instanceof ZodValidationException) {
+            const zodError = exception.getZodError();
+            if (zodError instanceof ZodError) {
+              const zodIssues = zodError.issues;
+              console.log('List of Errors', { zodIssues });
+              customResponse.error = zodIssues.map((issue) => ({
+                message: issue.message,
+                path: issue.path,
+              }));
+            }
+          }
+
+          break;
+        }
         case HttpStatus.UNAUTHORIZED: {
           customResponse.message = get(
             exceptionResponse,

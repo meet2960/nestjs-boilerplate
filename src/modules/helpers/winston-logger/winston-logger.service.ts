@@ -16,9 +16,6 @@ export class WinstonLoggerService {
   private readonly mainConsoleLogger: winston.Logger;
 
   private readonly commonLogger: winston.Logger;
-  private readonly digiSevaLogger: winston.Logger;
-  private readonly branchXLogger: winston.Logger;
-  private readonly instantPayLogger: winston.Logger;
 
   constructor(private readonly socketioGateway: SocketioGateway) {
     this.mainConsoleLogger = winston.createLogger({
@@ -53,29 +50,8 @@ export class WinstonLoggerService {
 
     // * Common Logger
     this.commonLogger = createCustomWinstonLogger('common', {
-      defaultMetadata: {
+      defaultMeta: {
         service: 'Common APIs',
-      },
-    });
-
-    // * Logger for DIGI
-    this.digiSevaLogger = createCustomWinstonLogger('digi-seva', {
-      defaultMetadata: {
-        service: 'Digi Seva APIs',
-      },
-    });
-
-    // * Logger for Branch-X
-    this.branchXLogger = createCustomWinstonLogger('branch-x', {
-      defaultMetadata: {
-        service: 'Branch X APIs',
-      },
-    });
-
-    // * Logger for Instant-Pay
-    this.instantPayLogger = createCustomWinstonLogger('instant-pay', {
-      defaultMetadata: {
-        service: 'Instant Pay APIs',
       },
     });
   }
@@ -115,13 +91,6 @@ export class WinstonLoggerService {
     }
     if (serviceName === 'COMMON') {
       this.commonLogger.info(message, finalData);
-    } else if (serviceName === 'DIGI') {
-      this.digiSevaLogger.info(message, finalData);
-    } else if (serviceName === 'BRANCH-X') {
-      this.branchXLogger.info(message, finalData);
-    } else if (serviceName === 'INSTANT-PAY') {
-      this.logSocketEvent(finalData);
-      this.instantPayLogger.info(message, finalData);
     }
   }
 
@@ -144,12 +113,6 @@ export class WinstonLoggerService {
 
     if (serviceName === 'COMMON') {
       this.commonLogger.error(message, finalData);
-    } else if (serviceName === 'DIGI') {
-      this.digiSevaLogger.error(message, finalData);
-    } else if (serviceName === 'BRANCH-X') {
-      this.branchXLogger.error(message, finalData);
-    } else if (serviceName === 'INSTANT-PAY') {
-      this.instantPayLogger.error(message, finalData);
     }
   }
 

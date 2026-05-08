@@ -10,11 +10,6 @@ type LogLevel =
   | 'debug'
   | 'silly';
 
-interface LoggerOptions {
-  defaultMetadata?: Record<string, any>;
-  levels?: LogLevel[]; // which levels to create files for
-}
-
 export const maxFileRetainDays = '14d'; // Retain logs for 14 days
 export const maxFileSize = '20m'; // Max size of log file before rotation
 
@@ -33,13 +28,13 @@ export const baseWinstonDataFormat = combine(
 // Function to create a Winston logger instance
 export function createCustomWinstonLogger(
   serviceName: string,
-  options?: LoggerOptions,
+  options?: winston.LoggerOptions,
 ) {
-  const { defaultMetadata } = options || {};
+  const { defaultMeta } = options || {};
 
   const logger = winston.createLogger({
     level: 'info',
-    defaultMeta: defaultMetadata,
+    defaultMeta: defaultMeta,
     transports: [
       new DailyRotateFile({
         filename: `logs/day-%DATE%/${serviceName}/info-%DATE%.log`,

@@ -1,14 +1,14 @@
 import * as winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-type LogLevel =
-  | 'error'
-  | 'warn'
-  | 'info'
-  | 'http'
-  | 'verbose'
-  | 'debug'
-  | 'silly';
+// type LogLevel =
+//   | 'error'
+//   | 'warn'
+//   | 'info'
+//   | 'http'
+//   | 'verbose'
+//   | 'debug'
+//   | 'silly';
 
 export const maxFileRetainDays = '14d'; // Retain logs for 14 days
 export const maxFileSize = '20m'; // Max size of log file before rotation

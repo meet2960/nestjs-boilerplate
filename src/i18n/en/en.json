@@ -1,4 +1,0 @@
-{
-  "hello": "Hello, World!",
-  "server_status": "Server is running on port {{port}}"
-}

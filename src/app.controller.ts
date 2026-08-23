@@ -10,8 +10,9 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async getHello(@Res() res: Response) {
+    const response = await this.appService.getHello();
+    res.status(200).json(response);
   }
 
   @Get('users')

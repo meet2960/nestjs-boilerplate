@@ -7,12 +7,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { type Response } from 'express';
 import { ClsModule, ClsMiddleware } from 'nestjs-cls';
-import {
-  AcceptLanguageResolver,
-  HeaderResolver,
-  I18nModule,
-  QueryResolver,
-} from 'nestjs-i18n';
 import { ZodValidationPipe, ZodSerializerInterceptor } from 'nestjs-zod';
 import path from 'node:path';
 import { AppService } from './app.service';
@@ -23,6 +17,7 @@ import { LoggerMiddleware } from './middlewares';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { CaslModule } from './modules/helpers/casl/casl.module';
+import { I18nModule } from './modules/helpers/i18n/i18n.module';
 import { PrismadbModule } from './modules/helpers/prismadb/prismadb.module';
 import { ResponseTypeModule } from './modules/helpers/response-type/response-type.module';
 import { SocketioModule } from './modules/helpers/socketio/socketio.module';
@@ -78,23 +73,8 @@ import { SharedModule } from './shared/shared.module';
         },
       },
     }),
-    I18nModule.forRootAsync({
-      useFactory: (configService: ApiConfigService) => ({
-        fallbackLanguage: 'en',
-        loaderOptions: {
-          path: path.join(__dirname, '../i18n/'),
-          watch: configService.isDevelopment,
-        },
-      }),
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-        new HeaderResolver(['x-lang']),
-      ],
-      imports: [SharedModule],
-      inject: [ApiConfigService],
-    }),
     HealthCheckerModule,
+    I18nModule,
     ResponseTypeModule,
     WinstonLoggerModule,
     SocketioModule,

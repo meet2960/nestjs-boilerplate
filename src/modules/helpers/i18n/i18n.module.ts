@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -11,13 +11,14 @@ import { ApiConfigService } from '@/shared/services/api-config.service';
 import { SharedModule } from '@/shared/shared.module';
 import { I18nController } from './i18n.controller';
 
+@Global()
 @Module({
   imports: [
     I18nModuleBase.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
         loaderOptions: {
-          path: path.join(__dirname, './lang'),
+          path: path.join(__dirname, '../../../../i18n'),
           watch: configService.isDevelopment,
         },
       }),

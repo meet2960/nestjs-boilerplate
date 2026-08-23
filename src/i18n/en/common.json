@@ -1,0 +1,8 @@
+{
+  "hello": "Hello, World!",
+  "hello_world": "Hello, World! from i18n JSON file inside EN Folder",
+  "server_status": "Server is running on port {{port}}",
+  "user": {
+    "created": "User created successfully"
+  }
+}

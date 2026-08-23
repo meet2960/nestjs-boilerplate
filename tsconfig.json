@@ -26,7 +26,6 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "noImplicitReturns": true,
-    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],

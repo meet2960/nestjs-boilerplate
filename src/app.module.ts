@@ -105,7 +105,9 @@ import { SharedModule } from './shared/shared.module';
   controllers: [AppController],
   providers: [
     AppService,
+    // Validates incoming @Body, @Query, and @Param decorators
     { provide: APP_PIPE, useClass: ZodValidationPipe },
+    // Ensures your outgoing response strictly matches the expected schema
     {
       provide: APP_INTERCEPTOR,
       useClass: ZodSerializerInterceptor,

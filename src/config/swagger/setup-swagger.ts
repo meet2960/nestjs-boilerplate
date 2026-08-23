@@ -4,6 +4,7 @@ import {
   type SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { GlobalConfig } from '../global/global-config';
 import { swaggerDescription } from './data';
@@ -38,7 +39,7 @@ export function setupSwagger(app: INestApplication): void {
   SwaggerModule.setup(
     GlobalConfig.SWAGGER_CONFIG.documentationRoutePath,
     app,
-    document,
+    cleanupOpenApiDoc(document),
     {
       swaggerOptions: {
         persistAuthorization: true,

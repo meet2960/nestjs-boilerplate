@@ -7,12 +7,14 @@ import { ContextProvider } from '@/providers';
 export const RequestContext = createParamDecorator(
   async (_data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
+    const response = ctx.switchToHttp().getResponse();
     const reqId = ContextProvider.getClsService().getId();
 
     const sessionUser: IUserSession = request.user;
 
     const requestContext: IRequestContext = {
       requestObject: request,
+      responseObject: response,
       sessionUser: sessionUser,
       apiUid: reqId || nanoid(),
     };

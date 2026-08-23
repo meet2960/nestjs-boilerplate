@@ -9,7 +9,14 @@ export class PrismadbService
 {
   constructor() {
     const adapter = new PrismaPg(process.env.DATABASE_URL!);
-    super({ adapter, log: ['info', 'warn', 'error'] });
+    super({
+      adapter,
+      log: [
+        { emit: 'event', level: 'query' },
+        { emit: 'event', level: 'error' },
+        { emit: 'event', level: 'warn' },
+      ],
+    });
   }
 
   async onModuleInit() {

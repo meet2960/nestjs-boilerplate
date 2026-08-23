@@ -4,7 +4,7 @@ import {
   type PipeTransform,
   type ArgumentMetadata,
 } from '@nestjs/common';
-import { decryptRequest } from '../utility/encryption-utils';
+import { decryptRequest } from '../utility/encryption.util';
 
 @Injectable()
 export class DecryptPayloadPipe implements PipeTransform {

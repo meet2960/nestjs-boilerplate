@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ApiConfigService } from './api-config.service';
-import { getCurrentUtcDateTime } from '@/common/utility/date-fns-utils';
-import { base64ToFileBuffer } from '@/common/utility/file-utils';
-import { getRandomStringUtils } from '@/common/utility/generator-utils';
-import { streamToBuffer } from '@/common/utility/stream-utils';
+import { getCurrentUtcDateTime } from '@/common/utility/date-fns.util';
+import { base64ToFileBuffer } from '@/common/utility/file.util';
+import { getRandomStringUtils } from '@/common/utility/generator.util';
+import { streamToBuffer } from '@/common/utility/stream.util';
 import {
   CopyObjectCommand,
   DeleteObjectCommand,

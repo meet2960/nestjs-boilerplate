@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismadbService } from './modules/helpers/prismadb/prismadb.service';
-import { getCurrentUtcDateTime } from './common/utility/date-fns-utils';
-import { getRandomNumber } from './common/utility/generator-utils';
+import { getCurrentUtcDateTime } from './common/utility/date-fns.util';
+import { getRandomNumber } from './common/utility/generator.util';
 import { CreateUserDto } from './create-user.dto';
 
 @Injectable()

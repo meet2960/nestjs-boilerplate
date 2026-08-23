@@ -9,7 +9,7 @@ import { type Request, type Response } from 'express';
 import {
   decryptRequest,
   encryptRequest,
-} from '@/common/utility/encryption-utils';
+} from '@/common/utility/encryption.util';
 
 @Injectable()
 export class EncryptionInterceptor implements NestInterceptor {

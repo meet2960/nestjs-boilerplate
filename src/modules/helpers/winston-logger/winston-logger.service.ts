@@ -3,8 +3,8 @@ import { get } from 'lodash-es';
 import * as util from 'node:util';
 import * as winston from 'winston';
 import type { API_MODULE_NAMES } from '@/config/global/global-config-types';
-import { serializeError } from '@/common/utility/error-utils';
-import { createCustomWinstonLogger } from '@/common/utility/winston-utils';
+import { serializeError } from '@/common/utility/error.util';
+import { createCustomWinstonLogger } from '@/common/utility/winston.util';
 import { ContextProvider } from '@/providers';
 import { SocketioGateway } from '../socketio/socketio.gateway';
 

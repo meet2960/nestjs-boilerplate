@@ -1,6 +1,6 @@
 import { Injectable, type NestMiddleware } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
-import { getCurrentUtcDateTime } from '@/common/utility/date-fns-utils';
+import { getCurrentUtcDateTime } from '@/common/utility/date-fns.util';
 import { ContextProvider } from '@/providers';
 
 @Injectable()

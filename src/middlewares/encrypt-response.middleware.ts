@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { encryptRequest } from '@/common/utility/encryption-utils';
+import { encryptRequest } from '@/common/utility/encryption.util';
 
 export function EncryptResponseMiddleware(
   req: Request,

@@ -2,7 +2,7 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { WinstonLoggerService } from '../winston-logger/winston-logger.service';
 import type { API_MODULE_NAMES } from '@/config/global/global-config-types';
 import { type IApiResponse } from '@/common/types/api-response.interface';
-import { getRandomUUID } from '@/common/utility/generator-utils';
+import { getRandomUUID } from '@/common/utility/generator.util';
 
 type OmittedResponse<T> = Omit<IApiResponse<T>, 'status' | 'statusCode'>;
 

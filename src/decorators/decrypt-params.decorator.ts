@@ -1,4 +1,4 @@
-import { urlParamsDecrypt } from '@/common/utility/url-functions';
+import { urlParamsDecrypt } from '@/common/utility/url.util';
 import { GlobalConfig } from '@/config/global/global-config';
 import {
   BadRequestException,

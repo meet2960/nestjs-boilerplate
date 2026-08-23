@@ -19,7 +19,7 @@ import { ActionCode } from '@/modules/helpers/casl/static/action-code';
 import { PageCode } from '@/modules/helpers/casl/static/page-code';
 import { LocalLogService } from './local-log.service';
 import { AuthMethodDecorator, PermissionDecorator } from '@/decorators';
-import { getCurrentUtcDateTime } from '@/common/utility/date-fns-utils';
+import { getCurrentUtcDateTime } from '@/common/utility/date-fns.util';
 import { ListLocalLogsDto } from './dto/list-local-logs.dto';
 
 @ApiTags('Local Logs')

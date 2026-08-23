@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import type { IUserSession } from './IUserSession';
+import type { IUserSession } from './user-session.interface';
 
 export interface IRequestContext {
   requestObject: Request;

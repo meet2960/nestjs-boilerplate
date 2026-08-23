@@ -1,4 +1,4 @@
-import { cryptoDecrypt, cryptoEncrypt } from './encryption-utils';
+import { cryptoDecrypt, cryptoEncrypt } from './encryption.util';
 
 export function urlParamsEncrypt(password: string | null) {
   try {

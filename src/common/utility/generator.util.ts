@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { customAlphabet, nanoid } from 'nanoid';
 import * as crypto from 'node:crypto';
 import { v4 as uuidv4, type Version4Options } from 'uuid';
-import { getCurrentUtcDateTime } from './date-fns-utils';
+import { getCurrentUtcDateTime } from './date-fns.util';
 
 export function generateRandomToken() {
   return crypto.randomBytes(64).toString('hex');

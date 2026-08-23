@@ -13,7 +13,7 @@ import type { Response } from 'express';
 import { get } from 'lodash-es';
 import { ZodValidationException } from 'nestjs-zod';
 import { ZodError } from 'zod';
-import type { IApiResponse } from '@/common/entity/IApiResponse';
+import type { IApiResponse } from '@/common/types/api-response.interface';
 
 @Catch(HttpException)
 export class GlobalHttpExceptionFilter implements ExceptionFilter {

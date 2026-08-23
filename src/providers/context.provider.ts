@@ -1,7 +1,7 @@
 import { ClsService, ClsServiceManager } from 'nestjs-cls';
 import type { AppAbility } from '@/modules/helpers/casl/static/casl.types';
 import type { LanguageCode } from '@/common/constants';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';

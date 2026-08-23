@@ -1,5 +1,5 @@
 import { extname } from 'node:path';
-import type { INameValueObj } from '../entity/INameValue';
+import type { INameValueObj } from '../schemas/name-value.schema';
 
 export function base64ToFileBuffer(base64String: string) {
   const base64Regex = /^data:([^;]+);base64,(.+)$/;

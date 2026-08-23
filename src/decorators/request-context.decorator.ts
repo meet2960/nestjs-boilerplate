@@ -1,7 +1,7 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
-import type { IRequestContext } from '@/common/entity/IRequestContext';
 import { nanoid } from 'nanoid';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IRequestContext } from '@/common/types/request-context.interface';
+import type { IUserSession } from '@/common/types/user-session.interface';
 import { ContextProvider } from '@/providers';
 
 export const RequestContext = createParamDecorator(

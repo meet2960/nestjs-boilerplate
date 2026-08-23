@@ -23,8 +23,6 @@ export class AppController {
   async createUser(@Body() data: CreateUserDto, @Res() res: Response) {
     console.log('Data received in controller:', data);
     const response = await this.appService.createUser(data);
-    res
-      .status(200)
-      .json({ message: 'User creation in progress', data: response });
+    res.status(200).json(response);
   }
 }

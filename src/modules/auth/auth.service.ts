@@ -17,7 +17,7 @@ import { get } from 'lodash-es';
 import { ResponseTypeService } from '../helpers/response-type/response-type.service';
 // import { ApiConfigService } from '@/shared/services/api-config.service';
 import { ApplicationSharedData } from '@/config/shared-data/application-shared-data';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 import '@/common/utility/date-utils';
 import { extractErrorMessage } from '@/common/utility/error-utils';
 import { ChangePasswordDto } from './dto/change-password.dto';

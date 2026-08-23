@@ -1,5 +1,5 @@
 import { get } from 'lodash-es';
-import { ServerResponseError } from '../classes/ServerResponeError';
+import { ServerResponseError } from '../classes/server-response-error';
 
 export function extractErrorMessage(
   error: unknown,

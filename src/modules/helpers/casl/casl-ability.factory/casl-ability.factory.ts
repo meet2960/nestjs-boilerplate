@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { flatMap } from 'lodash-es';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import type { ExtractSubjectType } from '@casl/ability';
 import {

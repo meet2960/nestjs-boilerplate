@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { Response } from 'express';
 import { get } from 'lodash-es';
-import type { IApiResponse } from '@/common/entity/IApiResponse';
+import type { IApiResponse } from '@/common/types/api-response.interface';
 
 @Catch()
 export class UnknownExceptionFilter implements ExceptionFilter {

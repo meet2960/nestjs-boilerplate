@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { Response } from 'express';
 import _ from 'lodash';
-import type { IApiResponse } from '@/common/entity/IApiResponse';
+import type { IApiResponse } from '@/common/types/api-response.interface';
 
 @Catch(UnprocessableEntityException)
 export class UnprocessableEntityExceptionFilter implements ExceptionFilter<UnprocessableEntityException> {

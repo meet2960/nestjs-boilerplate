@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
 import type { UserLoginDto } from './dto/user-login.dto';

@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 // import { UsersService } from '@/modules/api/users/users.service';
 // import { CaslAbilityFactory } from '@/modules/helpers/casl/casl-ability.factory/casl-ability.factory';
 import { ApiConfigService } from '@/shared/services/api-config.service';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 
 // import { ContextProvider } from '@/providers';
 

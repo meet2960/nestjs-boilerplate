@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import type { IUserSession } from '@/common/entity/IUserSession';
+import type { IUserSession } from '@/common/types/user-session.interface';
 
 //TODO: Fix the User Entity and remove the 'any' type from the user property in ICreateLoginHistoryRecord interface
 export interface ICreateLoginHistoryRecord {

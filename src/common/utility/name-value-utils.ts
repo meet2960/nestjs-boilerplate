@@ -1,4 +1,4 @@
-import type { INameValueArr } from '../entity/INameValue';
+import type { INameValueArr } from '../schemas/name-value.schema';
 
 export function createNameValueArray(
   dataList: string | undefined | null,

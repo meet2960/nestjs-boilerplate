@@ -1,1 +1,0 @@
-export type API_MODULE_NAMES = 'COMMON' | 'DIGI' | 'BRANCH-X' | 'INSTANT-PAY';

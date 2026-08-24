@@ -74,3 +74,65 @@ export const mimeTypeMap: Record<string, string> = {
   'application/vnd.android.package-archive': 'apk',
   'application/x-iso9660-image': 'iso',
 };
+
+export const ALLOWED_FILE_TYPES = {
+  pdf: {
+    mimeTypes: ['application/pdf'],
+    extensions: ['.pdf'],
+  },
+  images: {
+    mimeTypes: [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'image/svg+xml',
+      'image/bmp',
+      'image/tiff',
+    ],
+    extensions: [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.gif',
+      '.webp',
+      '.svg',
+      '.bmp',
+      '.tif',
+      '.tiff',
+    ],
+  },
+  word: {
+    mimeTypes: [
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    extensions: ['.doc', '.docx'],
+  },
+  excel: {
+    mimeTypes: [
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ],
+    extensions: ['.xls', '.xlsx'],
+  },
+  powerpoint: {
+    mimeTypes: [
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    ],
+    extensions: ['.ppt', '.pptx'],
+  },
+  text: {
+    mimeTypes: ['text/plain'],
+    extensions: ['.txt'],
+  },
+  csv: {
+    mimeTypes: ['text/csv'],
+    extensions: ['.csv'],
+  },
+  json: {
+    mimeTypes: ['application/json'],
+    extensions: ['.json'],
+  },
+} as const;

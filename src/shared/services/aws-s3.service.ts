@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ApiConfigService } from './api-config.service';
 import { getCurrentUtcDateTime } from '@/common/utility/date-fns.util';
-import { base64ToFileBuffer } from '@/common/utility/file.util';
+import {
+  base64ToFileBuffer,
+  S3_PRESIGNED_URL_EXPIRY,
+} from '@/common/utility/file.util';
 import { getRandomStringUtils } from '@/common/utility/generator.util';
 import { streamToBuffer } from '@/common/utility/stream.util';
 import {
@@ -43,13 +46,28 @@ export class AwsS3Service {
   }
 
   // * Generate Presigned URL
-  async generatePresignedUrl(key: string, expiresInSeconds: number = 3600) {
+  async generatePresignedUrl(
+    key: string,
+    options: {
+      expiresInSeconds?: number;
+      download?: boolean;
+      filename?: string;
+    } = {},
+  ) {
     try {
+      const {
+        expiresInSeconds = S3_PRESIGNED_URL_EXPIRY.ONE_DAY,
+        download,
+        filename,
+      } = options;
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
         Key: key,
-        // ResponseContentType: 'application/octet-stream',
-        // ResponseContentDisposition: 'attachment',
+        ResponseContentDisposition: download
+          ? filename
+            ? `attachment; filename="${filename}"`
+            : 'attachment'
+          : 'inline',
       });
       const url = await getSignedUrl(this.s3Client, command, {
         expiresIn: expiresInSeconds,
@@ -130,7 +148,6 @@ export class AwsS3Service {
       );
       return true;
     } catch (err) {
-      console.error('S3 delete error:', err);
       return false;
     }
   }
@@ -170,20 +187,28 @@ export class AwsS3Service {
     }
   }
 
-  //   async uploadBinaryFile(file: Express.Multer.File, options: { key: string }) {
-  //     try {
-  //       const command = new PutObjectCommand({
-  //         Bucket: this.bucketName,
-  //         Body: file.buffer,
-  //         ContentType: file.mimetype || 'application/octet-stream',
-  //         Key: options.key,
-  //       });
-  //       const response = await this.s3.send(command);
-  //       console.log('response', response);
-  //       return response;
-  //     } catch (error) {
-  //       console.log('error', error);
-  //       return null;
-  //     }
+  // // * Upload Binary File
+  // async uploadBinaryFile(
+  //   file: Express.Multer.File,
+  //   options: { key: string; mimetype?: string },
+  // ): Promise<any> {
+  //   try {
+  //     const command = new PutObjectCommand({
+  //       Bucket: this.bucketName,
+  //       Body: file.buffer,
+  //       ContentType:
+  //         file.mimetype || options.mimetype || 'application/octet-stream',
+  //       Key: options.key,
+  //       ServerSideEncryption: 'AES256',
+  //     });
+  //     const response = await this.s3Client.send(command);
+  //     return {
+  //       key: options.key,
+  //       etag: response.ETag,
+  //       versionId: response.VersionId,
+  //     };
+  //   } catch (error) {
+  //     throw new InternalServerErrorException('Failed to upload file');
   //   }
+  // }
 }

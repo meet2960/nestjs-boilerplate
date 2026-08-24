@@ -2,7 +2,7 @@ import { Global, Injectable } from '@nestjs/common';
 import { get } from 'lodash-es';
 import * as util from 'node:util';
 import * as winston from 'winston';
-import type { API_MODULE_NAMES } from '@/config/global/global-config-types';
+import { API_MODULE_NAMES } from '@/common/types/common.type';
 import { serializeError } from '@/common/utility/error.util';
 import { createCustomWinstonLogger } from '@/common/utility/winston.util';
 import { ContextProvider } from '@/providers';
@@ -75,7 +75,7 @@ export class WinstonLoggerService {
   }
 
   log(
-    serviceName: API_MODULE_NAMES,
+    serviceName: API_MODULE_NAMES = 'COMMON',
     message: string,
     data: any,
     _wType: 'logger' | 'console' = 'logger',
@@ -95,7 +95,7 @@ export class WinstonLoggerService {
   }
 
   error(
-    serviceName: API_MODULE_NAMES,
+    serviceName: API_MODULE_NAMES = 'COMMON',
     message: string,
     data: any,
     _wType: 'logger' | 'console' = 'logger',

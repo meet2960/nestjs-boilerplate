@@ -32,4 +32,9 @@ export class GlobalConfig {
   public static readonly DECRYPT_PAYLOAD_BODY = true;
 
   public static readonly GLOBAL_REQ_RES_ENCRYPTION = false;
+
+  public static readonly API_MODULE_NAMES = {
+    COMMON: 'COMMON',
+    EXTERNAL_API: 'EXTERNAL_API',
+  } as const;
 }

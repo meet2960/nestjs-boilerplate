@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { WinstonLoggerService } from '../winston-logger/winston-logger.service';
-import type { API_MODULE_NAMES } from '@/config/global/global-config-types';
 import { type IApiResponse } from '@/common/types/api-response.interface';
+import { API_MODULE_NAMES } from '@/common/types/common.type';
 import { getRandomUUID } from '@/common/utility/generator.util';
 
 type OmittedResponse<T> = Omit<IApiResponse<T>, 'status' | 'statusCode'>;
@@ -87,12 +87,8 @@ export class ResponseTypeService {
       extraData,
     };
 
-    if (appName === 'BRANCH-X') {
-      this.winstonService.log('BRANCH-X', apiResponse.message, dataToLog);
-    } else if (appName === 'DIGI') {
-      this.winstonService.log('DIGI', apiResponse.message, dataToLog);
-    } else if (appName === 'INSTANT-PAY') {
-      this.winstonService.log('INSTANT-PAY', apiResponse.message, dataToLog);
+    if (appName === 'EXTERNAL_API') {
+      this.winstonService.log('EXTERNAL_API', apiResponse.message, dataToLog);
     } else {
       this.winstonService.log('COMMON', apiResponse.message, dataToLog);
     }
@@ -115,12 +111,8 @@ export class ResponseTypeService {
       extraData,
     };
 
-    if (appName === 'BRANCH-X') {
-      this.winstonService.error('BRANCH-X', apiResponse.message, dataToLog);
-    } else if (appName === 'DIGI') {
-      this.winstonService.error('DIGI', apiResponse.message, dataToLog);
-    } else if (appName === 'INSTANT-PAY') {
-      this.winstonService.error('INSTANT-PAY', apiResponse.message, dataToLog);
+    if (appName === 'EXTERNAL_API') {
+      this.winstonService.error('EXTERNAL_API', apiResponse.message, dataToLog);
     } else {
       this.winstonService.error('COMMON', apiResponse.message, dataToLog);
     }

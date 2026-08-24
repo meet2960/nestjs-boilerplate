@@ -1,4 +1,4 @@
-export enum Order {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
+export const Order = {
+  asc: 'ASC',
+  desc: 'DESC',
+} as const;

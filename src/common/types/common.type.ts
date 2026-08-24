@@ -12,3 +12,7 @@ export type KeyOfType<Entity, U> = {
 }[keyof Entity];
 
 export type Reference<T> = T;
+
+export type StringKeys<T> = {
+  [K in keyof T]: T[K] extends string ? K : never;
+}[keyof T];

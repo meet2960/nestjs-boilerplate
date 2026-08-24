@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { ActionCode } from '@/common/constants/action-code.constants';
+import { PageCode } from '@/common/constants/page-code.constants';
 import type { IUserSession } from '@/common/types/user-session.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
@@ -12,8 +14,6 @@ import {
   AuthUser,
   PermissionDecorator,
 } from '../../decorators';
-import { ActionCode } from '../helpers/casl/static/action-code';
-import { PageCode } from '../helpers/casl/static/page-code';
 
 @Controller('auth')
 @ApiTags('Auth')

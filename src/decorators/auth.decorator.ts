@@ -5,8 +5,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthUserInterceptor } from '../interceptors/auth-user-interceptor.service';
+import { RoleType } from '@/common/constants/role-type';
 import { PermissionGuard } from '@/guards/permission.guard';
-import { type RoleType } from '../common/constants';
 import { AuthGuard } from '../guards/auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { PublicRoute } from './public-route.decorator';

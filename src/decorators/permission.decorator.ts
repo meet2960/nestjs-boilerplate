@@ -1,5 +1,5 @@
-import { IAbility } from '@/modules/helpers/casl/static/casl.types';
 import { SetMetadata } from '@nestjs/common';
+import { IAbility } from '@/common/types/casl.interface';
 
 export const ABILITY = 'ABILITY';
 

@@ -3,7 +3,7 @@ import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { get } from 'lodash-es';
 import * as shelljs from 'shelljs';
 import { ResponseTypeService } from '../response-type/response-type.service';
-import { cronJobsData } from '@/common/constants/cron-jobs-code';
+import { cronJobsData } from '@/common/constants/cron-jobs.constants';
 
 // import { Client } from 'pg';
 

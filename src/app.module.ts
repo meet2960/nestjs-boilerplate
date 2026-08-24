@@ -12,7 +12,7 @@ import path from 'node:path';
 import { AppService } from './app.service';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { AppController } from './app.controller';
-import { excludeRoutesFromMiddleware } from './common/constants/exclude-route-list';
+import { excludeRoutesFromMiddleware } from './common/constants/exclude-routes.constants';
 import { LoggerMiddleware } from './middlewares';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module';

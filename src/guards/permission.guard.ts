@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { isEmpty } from 'lodash-es';
+import { ABILITY } from '@/decorators/permission.decorator';
 import {
   type Subjects,
-  Action,
+  Actions,
   IAbility,
-} from '@/modules/helpers/casl/static/casl.types';
-import { ABILITY } from '@/decorators/permission.decorator';
+} from '@/common/types/casl.interface';
 import { ContextProvider } from '@/providers';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class PermissionGuard implements CanActivate {
 
     const ability = ContextProvider.getAbility();
     const hasPagePermission = requiredPermission.every((rp) =>
-      ability.can(rp.action as Action, rp.subject as Subjects),
+      ability.can(rp.action as Actions, rp.subject as Subjects),
     );
 
     if (hasPagePermission) {

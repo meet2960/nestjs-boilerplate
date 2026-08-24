@@ -15,10 +15,10 @@ import archiver from 'archiver';
 import type { Response } from 'express';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { ActionCode } from '@/modules/helpers/casl/static/action-code';
-import { PageCode } from '@/modules/helpers/casl/static/page-code';
 import { LocalLogService } from './local-log.service';
 import { AuthMethodDecorator, PermissionDecorator } from '@/decorators';
+import { ActionCode } from '@/common/constants/action-code.constants';
+import { PageCode } from '@/common/constants/page-code.constants';
 import { getCurrentUtcDateTime } from '@/common/utility/date-fns.util';
 import { ListLocalLogsDto } from './dto/list-local-logs.dto';
 

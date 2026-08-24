@@ -1,6 +1,6 @@
 import { ClsService, ClsServiceManager } from 'nestjs-cls';
-import type { AppAbility } from '@/modules/helpers/casl/static/casl.types';
-import type { LanguageCode } from '@/common/constants';
+import { LanguageCode } from '@/common/constants/language-code.constants';
+import { type AppAbility } from '@/common/types/casl.interface';
 import type { IUserSession } from '@/common/types/user-session.interface';
 
 export class ContextProvider {

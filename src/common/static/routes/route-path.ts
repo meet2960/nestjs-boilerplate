@@ -1,10 +1,11 @@
-import { ActionCode } from '@/modules/helpers/casl/static/action-code';
-import { PageCode } from '@/modules/helpers/casl/static/page-code';
 import type {
   ApiOperationOptions,
   ApiParamOptions,
   ApiQueryOptions,
 } from '@nestjs/swagger';
+import { ActionCode } from '@/common/constants/action-code.constants';
+import { PageCode } from '@/common/constants/page-code.constants';
+
 // import { ApplicationSharedData } from '@/config/shared-data/application-shared-data';
 
 // const prefixPath = ApplicationSharedData.appApiPrefix + '/';
